@@ -1,0 +1,104 @@
+{% extends "index.html" %}
+{% block title %}Blogs - IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<style>
+
+/* Blog year section card */
+.year-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 20px 25px;
+    box-shadow: 0px 6px 20px rgba(0,0,0,0.10);
+    transition: 0.3s ease;
+    margin-bottom: 25px;
+}
+.year-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 12px 30px rgba(0,0,0,0.15);
+}
+
+/* Year header */
+.year-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4e73df;
+}
+
+/* Blog List */
+.blog-list li {
+    background: #f9fafb;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    transition: 0.25s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.blog-list li:hover {
+    background: #eef3ff;
+    transform: translateX(5px);
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Blog link */
+.blog-title {
+    text-decoration: none;
+    font-weight: 600;
+    color: #333;
+}
+.blog-title:hover {
+    color: #1cc88a;
+}
+
+/* Date styling */
+.blog-date {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+</style>
+
+
+
+<h1 class="display-5 fw-bold text-center my-5">Blogs</h1>
+
+<main>
+    <div class="container col-md-8 col-sm-12">
+
+        {% for year_count in year_blog_count %}
+
+        <!-- Year Card -->
+        <div class="year-card">
+            <h3 class="year-title">
+                {{ year_count.year }} — ({{ year_count.count }} Blogs)
+            </h3>
+
+            <ul class="blog-list mt-3">
+
+                {% for blog in blogs %}
+                {% if blog.created_at|date:"Y" == year_count.year|stringformat:"s" %}
+
+                <li>
+                    <a href="{% url 'blog' blog.id %}" class="blog-title">
+                        {{ blog.title }}
+                    </a>
+                    <span class="blog-date">
+                        {{ blog.created_at|date:"M d, Y" }}
+                    </span>
+                </li>
+
+                {% endif %}
+                {% endfor %}
+
+            </ul>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</main>
+
+{% endblock content %}

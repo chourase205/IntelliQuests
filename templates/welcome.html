@@ -1,0 +1,127 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<div class="container text-center my-5">
+
+    <h1 class="display-5 fw-bold my-2">Welcome to IntelliQuest</h1>
+    <p class="fs-4 text-muted mb-4">
+        Not just excel in college rankings — excel in real knowledge.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 mb-5">
+
+        <!-- Modern Gradient Button (same as Search button) -->
+        <a href="{% url 'all_quiz' %}" class="btn gradient-btn btn-lg px-4 py-2">
+            🚀 Take a Quiz
+        </a>
+
+        {% if not request.user.is_authenticated %}
+        <a href="{% url 'register' %}" class="btn btn-outline-secondary btn-lg px-4 py-2">
+            Sign Up
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- LEADERBOARD SECTION -->
+<div class="container text-center">
+
+    <h1 class="display-5 fw-bold text-center my-4">Leaderboard</h1>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+        {% if leaderboard_users|length == 0 %}
+        <div class="col-12 text-center">
+            <p class="text-danger fs-4 fw-semibold">No users available on the leaderboard!</p>
+        </div>
+
+        {% else %}
+        {% for rank in leaderboard_users %}
+        <div class="col">
+            <div class="leader-card shadow-sm p-4 h-100 rounded-4">
+
+                <div class="position-relative d-flex justify-content-center mb-3">
+                    <img src="{{ rank.user.profile.profile_img.url }}"
+                         class="rounded-circle border"
+                         width="110" height="110"
+                         alt="user profile">
+
+                    <span class="badge bg-success rank-badge">
+                        #{{ forloop.counter }}
+                    </span>
+                </div>
+
+                <h3 class="fw-bold">@{{ rank.user.username }}</h3>
+
+                <p class="text-muted small">
+                    {{ rank.user.profile.bio|truncatewords:8 }}
+                </p>
+
+                <a class="btn btn-outline-primary mt-2" href="{% url 'profile' rank.user.username %}">
+                    View Profile »
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- STYLES -->
+<style>
+/* Gradient button (same used in Quiz Search) */
+.gradient-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: 0.3s ease;
+    border: none;
+}
+
+.gradient-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* Leaderboard Card UI */
+.leader-card {
+    border-radius: 16px;
+    background: #ffffff;
+    transition: 0.25s ease;
+}
+
+.leader-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.15);
+}
+
+/* Rank Badge */
+.rank-badge {
+    position: absolute;
+    top: -5px;
+    right: 40%;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 576px) {
+    .gradient-btn {
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    .leader-card {
+        margin: 0 10px;
+    }
+}
+</style>
+
+{% endblock content %}

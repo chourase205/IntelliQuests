@@ -1,0 +1,111 @@
+{% extends "index.html" %}
+{% block title %}Terms and Conditions - IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<style>
+/* Main card container */
+.terms-card {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 20px;
+    max-width: 900px;
+    margin: auto;
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.10);
+    transition: 0.3s ease;
+}
+.terms-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 12px 35px rgba(0,0,0,0.15);
+}
+
+/* Headings */
+.terms-card h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #4e73df;
+}
+
+/* Text */
+.terms-card p {
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Back Button */
+.back-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white !important;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 25px;
+    display: inline-block;
+    transition: 0.3s ease;
+}
+.back-btn:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.20);
+}
+</style>
+
+
+<h1 class="display-5 fw-bold text-center my-5">Terms & Conditions</h1>
+
+<main>
+    <div class="terms-card">
+
+        <h2>1. Introduction</h2>
+        <p>
+            Welcome to IntelliQuest. By using this web application, you agree to comply with these terms and
+            conditions. If you do not agree, please discontinue use.
+        </p>
+
+        <h2>2. User Accounts</h2>
+        <p>
+            2.1 Some features require you to create an account.<br>  
+            2.2 You are responsible for protecting your login information.<br>  
+            2.3 Users must be at least 13 years old to use IntelliQuest.
+        </p>
+
+        <h2>3. Content</h2>
+        <p>
+            3.1 Some content is user-generated, including quiz questions and answers.<br>  
+            3.2 You agree not to post harmful, offensive, or illegal content.<br>  
+            3.3 IntelliQuest may remove any inappropriate content without notice.
+        </p>
+
+        <h2>4. Intellectual Property</h2>
+        <p>
+            4.1 All content, branding, and assets belong to IntelliQuest or its licensors.<br>  
+            4.2 Reproduction or distribution of app content is not allowed without permission.<br>
+        </p>
+
+        <h2>5. Disclaimer</h2>
+        <p>
+            5.1 IntelliQuest is provided "as is" without warranties.<br>  
+            5.2 We do not guarantee absolute accuracy of all information.<br>  
+            5.3 Use the app at your own risk; we are not liable for any damages.
+        </p>
+
+        <h2>6. Updates to Terms</h2>
+        <p>
+            6.1 These terms may be changed at any time.<br>  
+            6.2 Updates will be posted on this page.<br>  
+            6.3 Continued use after updates means you accept the revised terms.
+        </p>
+
+        <div class="text-center">
+            <a href="{% url 'home' %}" class="back-btn">← Back to Home</a>
+            <a href="{% url 'register' %}" class="back-btn">← Back to Register</a>
+        </div>
+
+    </div>
+</main>
+
+{% endblock content %}

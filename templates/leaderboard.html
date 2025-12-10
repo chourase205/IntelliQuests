@@ -1,0 +1,105 @@
+{% extends 'index.html' %}
+
+{% block title %}Leaderboard - BrainBunny{% endblock title %}
+
+{% block content %}
+
+<div class="container text-center">
+
+    <h1 class="display-5 fw-bold text-center my-5">Leaderboard</h1>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+
+        {% if leaderboard_users|length == 0 %}
+        <div class="col-12 mt-4">
+            <p class="text-danger fw-semibold fs-5">
+                No user available on the leaderboard!
+            </p>
+        </div>
+
+        {% else %}
+        {% for rank in leaderboard_users %}
+        <div class="col">
+            <div class="leader-card shadow-sm p-4 h-100 text-center rounded-4">
+
+                <!-- Profile Image + Rank Badge -->
+                <div class="position-relative d-flex justify-content-center mb-3">
+                    <img src="{{ rank.user.profile.profile_img.url }}"
+                         class="rounded-circle border leader-img"
+                         width="120" height="120" alt="user-profile">
+
+                    <span class="badge bg-success leader-rank">
+                        #{{ forloop.counter }}
+                    </span>
+                </div>
+
+                <h3 class="fw-bold">@{{ rank.user.username }}</h3>
+
+                <p class="text-muted small">
+                    {{ rank.user.profile.bio|truncatewords:8 }}
+                </p>
+
+                <a class="btn btn-outline-primary mt-2" 
+                   href="{% url 'profile' rank.user.username %}">
+                    View Profile »
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- DESIGN STYLES -->
+<style>
+/* Main card styling */
+.leader-card {
+    border-radius: 16px;
+    background: #ffffff;
+    transition: 0.25s ease;
+}
+.leader-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Profile image */
+.leader-img {
+    border: 3px solid #e8e8e8;
+    transition: 0.2s;
+}
+.leader-img:hover {
+    transform: scale(1.05);
+}
+
+/* Rank badge */
+.leader-rank {
+    position: absolute;
+    top: -10px;
+    right: 35%;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+/* Mobile responsive improvements */
+@media (max-width: 576px) {
+
+    .leader-card {
+        margin: 0 10px;
+        padding: 20px;
+    }
+
+    .leader-img {
+        width: 95px !important;
+        height: 95px !important;
+    }
+
+    .leader-rank {
+        right: 30%;
+    }
+}
+</style>
+
+{% endblock content %}

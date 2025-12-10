@@ -1,0 +1,104 @@
+{% extends "index.html" %}
+{% block title %}Contact Us - IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<style>
+
+/* Contact Card */
+.contact-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0px 6px 22px rgba(0,0,0,0.10);
+    transition: 0.3s ease;
+}
+.contact-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 12px 28px rgba(0,0,0,0.15);
+}
+
+/* Labels */
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+/* Inputs */
+.form-control {
+    border-radius: 12px;
+    padding: 10px 14px;
+}
+
+/* Gradient Button */
+.contact-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white !important;
+    font-weight: 600;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    width: 100%;
+    transition: 0.3s ease;
+}
+.contact-btn:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.20);
+}
+
+
+</style>
+
+
+<h1 class="display-5 fw-bold text-center my-5">Contact Us</h1>
+
+<main>
+    <div class="container d-flex justify-content-center">
+
+        <div class="col-md-6">
+            <div class="contact-card">
+
+                <form action="#" method="post">
+                    {% csrf_token %}
+
+                    <!-- Username -->
+                    <div class="form-group mb-4">
+                        <label for="username">Username</label>
+                        <input type="text"
+                               id="username"
+                               value="{{ request.user.username }}"
+                               class="form-control"
+                               disabled>
+                    </div>
+
+                    <!-- Subject -->
+                    <div class="form-group mb-4">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" required class="form-control">
+                    </div>
+
+                    <!-- Message -->
+                    <div class="form-group mb-4">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5"
+                                  class="form-control" required></textarea>
+                    </div>
+
+                    <!-- Button -->
+                    <button type="submit" class="contact-btn">
+                        ✉️ Send Message
+                    </button>
+                    <div class="text-center mt-4">
+            <a href="{% url 'home' %}" class="back-btn">← Back to Home</a>
+        </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+{% endblock content %}

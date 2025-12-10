@@ -1,0 +1,82 @@
+<!-- MODERN DESIGN FOOTER -->
+<style>
+    .footer-modern {
+        backdrop-filter: blur(12px);
+        background: rgba(255,255,255,0.6);
+        border-top: 1px solid rgba(255,255,255,0.4);
+        box-shadow: 0 -8px 25px rgba(0,0,0,0.08);
+        padding: 40px 0 25px;
+        margin-top: 60px;
+        transition: 0.3s ease;
+    }
+
+    .footer-modern .nav-link {
+        font-weight: 500;
+        color: #6c6c6c !important;
+        transition: 0.2s ease;
+        padding: 8px 15px !important;
+        border-radius: 6px;
+    }
+
+    .footer-modern .nav-link:hover {
+        color: #4a3aff !important;
+        background: rgba(100,80,255,0.12);
+    }
+
+    .footer-modern .brand {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        background: linear-gradient(90deg, #007bff, #7f4dff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .footer-divider {
+        height: 2px;
+        width: 180px;
+        margin: 0 auto 25px;
+        background: linear-gradient(90deg, #7f4dff, #007bff);
+        border-radius: 10px;
+    }
+</style>
+
+
+<footer class="footer-modern text-center">
+
+    <!-- Gradient Line -->
+    <div class="footer-divider"></div>
+
+    <!-- NAV LINKS -->
+    <ul class="nav justify-content-center mb-3">
+
+        <li class="nav-item">
+            <a href="{% url 'home' %}" class="nav-link">Home</a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'blogs' %}" class="nav-link">Blogs</a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'contact' %}" class="nav-link">Contact</a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'term_condition' %}" class="nav-link">Terms & Conditions</a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'about' %}" class="nav-link">About</a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'downloads' %}" class="nav-link">Downloads</a>
+        </li>
+    </ul>
+
+    <!-- COPYRIGHT -->
+    <p class="text-body-secondary mt-3">
+        © 2025 <span class="brand">IntelliQuest</span> — All Rights Reserved
+    </p>
+
+</footer>

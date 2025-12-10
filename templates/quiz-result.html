@@ -1,0 +1,180 @@
+{% extends 'index.html' %}
+{% load custom_filters %}
+
+{% block title %}Result - {{ submission.quiz.title }} | IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<style>
+/* Result Summary Card */
+.result-card {
+    max-width: 450px;
+    margin: auto;
+    border-radius: 18px;
+}
+
+.result-card .card {
+    border-radius: 18px;
+    transition: 0.3s ease;
+}
+
+.result-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Header */
+.result-header {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white;
+    border-radius: 18px 18px 0 0;
+    padding: 15px;
+}
+
+/* Gradient Buttons */
+.gradient-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white !important;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 22px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.gradient-btn:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+}
+.result-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: #fff !important;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    min-width: 150px;        /* makes all buttons same width */
+    text-align: center;      /* centers text */
+    white-space: nowrap;     /* prevents text from breaking into two lines */
+    transition: 0.3s ease;
+}
+
+.result-btn:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+}
+
+
+/* Question Cards */
+.question {
+    border-radius: 14px;
+    transition: 0.2s ease;
+}
+
+.question:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background: #f4f6ff;
+    border-radius: 14px 14px 0 0;
+    font-size: 1.1rem;
+    padding: 12px;
+}
+
+/* Correct answer highlight */
+.correct-answer-mark {
+    background: #d4edda !important;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Disable selection */
+.questions { user-select: none; }
+</style>
+
+
+<div class="container my-5">
+
+    <!-- RESULT SUMMARY CARD -->
+    <div class="result-card">
+        <div class="card shadow">
+
+            <div class="result-header text-center">
+                <h4 class="fw-bold">Quiz Result Summary</h4>
+            </div>
+
+            <div class="card-body">
+
+                <p><strong>Name:</strong> {{ submission.user.profile.full_name }}</p>
+                <p><strong>Quiz:</strong> {{ submission.quiz.title|title }}</p>
+                <p><strong>Total Questions:</strong> {{ submission.quiz.question_set.count }}</p>
+                <p><strong>Correct Answers:</strong> {{ submission.score }}</p>
+                <p><strong>Incorrect Answers:</strong> {{ submission.quiz.question_set.count|subtract:submission.score }}</p>
+                <p><strong>Submitted:</strong> {{ submission.submitted_at|timesince }} ago</p>
+
+                <hr>
+
+                <!-- ACTION BUTTONS -->
+<div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+
+    <a href="{% url 'all_quiz' %}" class="result-btn">
+        All Quizzes
+    </a>
+
+    <a href="{% url 'quiz' submission.quiz.id %}" class="result-btn">
+        Retake
+    </a>
+
+    <a href="{% url 'profile' request.user.username %}" class="result-btn">
+        ← Back to Profile
+    </a>
+
+</div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- QUESTIONS AND CORRECT ANSWERS -->
+    <div class="questions my-5">
+
+        {% for question in submission.quiz.question_set.all %}
+        <div class="card question mb-4">
+
+            <div class="card-header fw-bold">
+                Question {{ forloop.counter }}
+            </div>
+
+            <div class="card-body">
+                <p class="fs-5">{{ question.text }}</p>
+
+                {% for option in question.choice_set.all %}
+                <div class="form-check my-2">
+
+                    <input class="form-check-input"
+                           type="radio"
+                           disabled
+                           {% if option.is_correct %}checked{% endif %}>
+
+                    <label class="form-check-label {% if option.is_correct %}correct-answer-mark{% endif %}">
+                        {{ option.text }}
+                    </label>
+
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock content %}

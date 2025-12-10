@@ -1,0 +1,135 @@
+{% extends "index.html" %}
+
+{% block title %}All Quizzes{% endblock title %}
+
+{% block content %}
+<div class="container my-5">
+
+    <!-- Page Header -->
+    <h1 class="display-5 fw-bold text-center mb-4">Explore All Quizzes</h1>
+
+    <!-- Category Pills -->
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+
+        <!-- ALL Button (now light) -->
+        <a href="{% url 'all_quiz' %}" 
+           class="badge rounded-pill bg-white text-dark px-3 py-2 fs-6 shadow-sm border category-pill">
+           All
+        </a>
+
+        {% for category in categories %}
+        <a href="{% url 'search' category.name %}" 
+           class="badge rounded-pill bg-white text-dark px-3 py-2 fs-6 shadow-sm border category-pill">
+           {{ category.name }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Search Bar -->
+    <form class="d-flex justify-content-center mb-4" role="search"
+          method="GET" action="{% url 'search' ' ' %}">
+        <input name="q" type="search" class="form-control w-50 shadow-sm rounded-pill px-3"
+               placeholder="Search for a quiz...">
+
+        <!-- Modern Gradient Button -->
+        <button class="btn modern-search-btn ms-2 px-4 py-2" type="submit">
+            🔍 Search
+        </button>
+    </form>
+
+    <!-- Quiz Cards -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+        {% if quizzes|length > 0 %}
+        {% for quiz in quizzes %}
+        <div class="col">
+            <div class="card border-0 shadow-sm quiz-card h-100">
+                <div class="card-body">
+                    <h4 class="fw-bold">{{ quiz.title }}</h4>
+
+                    <p class="text-muted small mb-1">
+                        Total Questions: {{ quiz.question_set.all|length }}
+                    </p>
+
+                    <p class="mb-3">
+                        {{ quiz.description|truncatewords:12 }}
+                    </p>
+
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <a href="{% url 'quiz' quiz.id %}"
+                           class="btn btn-outline-success btn-sm px-3">
+                           Start Quiz
+                        </a>
+
+                        <small class="text-muted">{{ quiz.created_at|timesince }} ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% else %}
+    <div class="w-100 d-flex justify-content-center mt-5 display-7 fw-bold text-dark">
+    <div class="empty-message">
+        ⚠️ No quiz available in this category or search.
+    </div>
+</div>
+
+
+
+
+
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- Modern Styles -->
+<style>
+    /* Category Pills (fixed animation issue) */
+    .category-pill {
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .category-pill:hover {
+        background: #f1f1f1;
+        transform: translateY(-3px);
+    }
+    .category-pill:active {
+        transform: scale(0.97);
+    }
+
+    /* Search button - Gradient style */
+    .modern-search-btn {
+        background: linear-gradient(135deg, #4e73df, #1cc88a);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: 0.3s ease;
+    }
+    .modern-search-btn:hover {
+        opacity: 0.85;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    /* QUIZ CARD hover (smooth, non-conflicting) */
+    .quiz-card {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        border-radius: 15px;
+    }
+    .quiz-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0px 8px 25px rgba(0,0,0,0.15);
+    }
+
+.empty-message {
+    margin-left: auto;
+    margin-right: auto;
+	color: #d9534f;
+}
+
+
+</style>
+
+{% endblock content %}

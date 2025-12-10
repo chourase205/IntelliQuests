@@ -1,0 +1,7 @@
+python3 manage.py test
+
+python3 manage.py test app_name
+
+python3 manage.py test app_name.tests.ClassName
+
+python3 manage.py test app_name.tests.ClassName.method_name

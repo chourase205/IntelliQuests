@@ -1,0 +1,186 @@
+{% extends "index.html" %}
+{% block title %}Dashboard - IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<h1 class="display-5 fw-bold text-center my-5">Dashboard Overview</h1>
+
+<div class="container">
+
+    <!-- Stats Cards -->
+    <div class="row g-4">
+
+        <!-- USERS -->
+        <div class="col-sm-6 col-lg-3">
+            <div class="dash-card shadow-sm p-4 text-center">
+                <h1 class="fw-bold">{{ total_users }}</h1>
+                <p class="text-muted mb-0">Active Users</p>
+
+                <ul class="list-group mt-4 small-stats">
+                    <li class="list-group-item d-flex justify-content-between">
+                        Today <span class="badge bg-primary">{{ today_users }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Gain % <span class="badge bg-primary">{{ gain_users|default:0 }}%</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- QUIZZES -->
+        <div class="col-sm-6 col-lg-3">
+            <div class="dash-card shadow-sm p-4 text-center">
+                <h1 class="fw-bold">{{ total_quizzes }}</h1>
+                <p class="text-muted mb-0">Quizzes</p>
+
+                <ul class="list-group mt-4 small-stats">
+                    <li class="list-group-item d-flex justify-content-between">
+                        Today <span class="badge bg-primary">{{ today_quizzes }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Gain % <span class="badge bg-primary">{{ gain_quizzes|default:0 }}%</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SUBMISSIONS -->
+        <div class="col-sm-6 col-lg-3">
+            <div class="dash-card shadow-sm p-4 text-center">
+                <h1 class="fw-bold">{{ total_quiz_submit }}</h1>
+                <p class="text-muted mb-0">Submissions</p>
+
+                <ul class="list-group mt-4 small-stats">
+                    <li class="list-group-item d-flex justify-content-between">
+                        Today <span class="badge bg-primary">{{ today_quiz_submit }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Gain % <span class="badge bg-primary">{{ gain_quiz_submit|default:0 }}%</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- QUESTIONS -->
+        <div class="col-sm-6 col-lg-3">
+            <div class="dash-card shadow-sm p-4 text-center">
+                <h1 class="fw-bold">{{ total_questions }}</h1>
+                <p class="text-muted mb-0">Questions</p>
+
+                <ul class="list-group mt-4 small-stats">
+                    <li class="list-group-item d-flex justify-content-between">
+                        Today <span class="badge bg-primary">{{ today_questions }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Gain % <span class="badge bg-primary">{{ gain_questions|default:0 }}%</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Inbox Section -->
+    <div class="mt-5">
+        <h2 class="fw-bold text-center mb-4">Inbox</h2>
+
+        <div class="table-responsive shadow-sm rounded-4 inbox-table">
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Subject</th>
+                        <th>Time</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for message in inbox_messages %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <a href="{% url 'profile' message.user.username %}">
+                                @{{ message.user.username }}
+                            </a>
+                        </td>
+                        <td>{{ message.subject }}</td>
+                        <td>{{ message.created_at|timesince }} ago</td>
+                        <td>
+                            <a href="{% url "message" message.id %}" class="btn btn-sm gradient-btn">
+                                Open
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-danger py-3">
+                            No messages today.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- STYLES -->
+<style>
+
+/* Main stat cards */
+.dash-card {
+    border-radius: 18px;
+    background: #ffffff;
+    transition: 0.25s ease;
+}
+.dash-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Smaller list group styling */
+.small-stats .list-group-item {
+    border: none;
+    background: #f8f9fd;
+}
+
+/* Gradient Button (same as quiz page) */
+.gradient-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white !important;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: none;
+    transition: 0.3s ease;
+}
+.gradient-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
+/* Inbox table styling */
+.inbox-table {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.table-hover tbody tr:hover {
+    background: #f4f8ff;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 576px) {
+    .dash-card {
+        padding: 20px;
+        text-align: center;
+    }
+}
+</style>
+
+{% endblock content %}

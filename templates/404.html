@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Not Found | IntelliQuest</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0e0e0e;
+            color: #ffffff;
+            font-family: "Segoe UI", Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 130px;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: -5px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                filter: drop-shadow(0 0 5px #ff8a00);
+            }
+            to {
+                filter: drop-shadow(0 0 15px #e52e71);
+            }
+        }
+
+        p {
+            font-size: 18px;
+            margin: 10px 0 25px;
+            color: #cfcfcf;
+        }
+
+        a {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #ff8a00;
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: .3s;
+        }
+
+        a:hover {
+            background: #e67800;
+        }
+
+        .small {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>404</h1>
+        <p>Oops! The page you're looking for doesn't exist or has been moved.</p>
+
+        <a href="/">🏠 Go Back to Home</a>
+
+        <div class="small">IntelliQuest — Challenge Your Knowledge</div>
+    </div>
+
+</body>
+</html>

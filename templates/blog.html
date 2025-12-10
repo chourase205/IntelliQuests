@@ -1,0 +1,112 @@
+{% extends "index.html" %}
+{% block title %}{{ blog.title }} - IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<style>
+/* Main blog container */
+.blog-card {
+    max-width: 900px;
+    margin: auto;
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.10);
+    transition: 0.3s ease;
+}
+.blog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 12px 32px rgba(0,0,0,0.15);
+}
+
+/* Meta section */
+.blog-meta {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-size: 1rem;
+    margin-bottom: 25px;
+}
+.blog-meta div {
+    margin-bottom: 10px;
+}
+.blog-meta sub {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4e73df;
+}
+
+/* Rich content styles */
+.blog-post p,
+.blog-post li {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #020202ff;
+}
+
+.blog-post h2,
+.blog-post h3 {
+    margin-top: 22px;
+    color: #080843ff;
+    font-weight: 700;
+}
+
+/* Gradient button */
+.back-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white !important;
+    padding: 10px 26px;
+    border-radius: 50px;
+    font-weight: 600;
+    display: inline-block;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+.back-btn:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.20);
+}
+
+</style>
+
+
+
+<h1 class="display-5 fw-bold text-center my-5">{{ blog.title|title }}</h1>
+
+<main>
+    <div class="blog-card">
+
+        <!-- Author + Time Section -->
+        <div class="blog-meta">
+            <div>
+                <sub>Author</sub><br>
+                <a href="{% url 'profile' blog.author.username %}">
+                    @{{ blog.author.username }}
+                </a>
+            </div>
+
+            <div>
+                <sub>Published</sub><br>
+                {{ blog.created_at|timesince }} ago
+            </div>
+
+            <div>
+                <sub>Updated</sub><br>
+                {{ blog.updated_at|timesince }} ago
+            </div>
+        </div>
+
+        <!-- Blog Content -->
+        <article class="blog-post">
+            {{ blog.content|safe }}
+        </article>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'blogs' %}" class="back-btn">← Back to Blogs</a>
+        </div>
+
+    </div>
+</main>
+
+{% endblock content %}

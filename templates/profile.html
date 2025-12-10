@@ -1,0 +1,250 @@
+{% extends "index.html" %}
+
+{% block title %}@{{profile_user.username}}'s Profile - Intelliquest{% endblock title %}
+
+{% block content %}
+
+<h1 class="display-5 fw-bold text-center my-5">@{{ profile_user.username }}'s Profile</h1>
+
+<div class="container text-center">
+
+    <!-- Alert Messages -->
+    {% for message in messages %}
+        <h5 class="text-{{ message.level_tag }}">{{ message }}</h5>
+    {% endfor %}
+
+    <!-- EDIT / DELETE BUTTONS -->
+    {% if request.user.username == profile_user.username %}
+    <div class="d-flex justify-content-center gap-3 mt-3 mb-4">
+
+    <a href="{% url 'edit_profile' %}"
+       class="btn edit-btn px-4 py-2 rounded-pill">
+        ✏️ Edit Profile
+    </a>
+
+    <a href="{% url 'delete_profile' %}"
+       class="btn delete-btn px-4 py-2 rounded-pill">
+        🗑 Delete Profile
+    </a>
+
+</div>
+
+    {% endif %}
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card shadow-sm p-4 rounded-4 mb-5">
+
+    <div class="row row-cols-1 row-cols-md-2 align-items-center">
+
+        <!-- Left: Profile Image + Username -->
+        <div class="col text-center mb-4">
+
+            <img src="{{ profile_data.profile_img.url }}"
+                 alt="user-profile"
+                 class="rounded-circle profile-img-large">
+
+            <h2 class="fw-bold mt-3">@{{ profile_user.username }}</h2>
+
+        </div>
+
+        <!-- Right: Info -->
+        <div class="col text-start profile-info">
+
+            <p class="fs-5">
+                <i class="bi bi-person-vcard"></i>
+                <strong>Name:</strong>
+                {{ profile_user.first_name|default:"Full Name Not Available" }} {{ profile_user.last_name }}
+            </p>
+
+            <p class="fs-5">
+                <i class="bi bi-gender-ambiguous"></i>
+                <strong>Gender:</strong>
+                {{ profile_data.gender|default:"Gender Not Available" }}
+            </p>
+
+            <p class="fs-5">
+                <i class="bi bi-geo-alt"></i>
+                <strong>Location:</strong>
+                {{ profile_data.location|default:"Location Not Available" }}
+            </p>
+
+            <p class="fs-5">
+                <i class="bi bi-feather"></i>
+                <strong>Bio:</strong>
+                {{ profile_data.bio|default:"Bio Not Available" }}
+            </p>
+
+            {% if request.user.is_superuser %}
+            <p class="fs-5">
+                <i class="bi bi-envelope-at"></i>
+                <strong>Email:</strong>
+                <a href="mailto:{{ profile_user.email }}">
+                    {{ profile_user.email|default:"Email Not Available" }}
+                </a>
+            </p>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+
+    <hr class="my-5">
+
+    <!-- QUIZ HISTORY + PERFORMANCE -->
+    <div class="row row-cols-1 row-cols-lg-2 g-4">
+
+        <!-- QUIZ HISTORY -->
+        <div class="col">
+            <h3 class="fw-bold mb-3">Quiz History</h3>
+
+            <div class="table-responsive shadow-sm rounded-4">
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Quiz</th>
+                            <th>Marks</th>
+                            <th>Time</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for submission in submissions %}
+                        <tr>
+                            <th>{{ forloop.counter }}</th>
+
+                            <td title="{{ submission.quiz.title }}">
+                                {{ submission.quiz.title|truncatewords:4 }}
+                            </td>
+
+                            <td>
+                                {{ submission.score }}/{{ submission.quiz.question_set.all|length }}
+                            </td>
+
+                            <td>{{ submission.submitted_at|timesince }} ago</td>
+
+                            <td>
+                                <a href="{% url 'quiz_result' submission.id %}"
+                                   class="btn gradient-btn btn-sm px-3">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-danger py-3">
+                                No quiz attempts yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <!-- PERFORMANCE -->
+        <div class="col">
+            <h3 class="fw-bold mb-3">Performance</h3>
+
+            <div class="performance-card shadow-sm rounded-4 p-4 text-center">
+                <p class="text-muted mb-0">Performance graph will go here…</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- STYLES -->
+<style>
+    /* EDIT BUTTON (Blue) */
+.edit-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: #fff !important;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s ease;
+}
+
+.edit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    opacity: 0.9;
+}
+
+/* DELETE BUTTON (Red) */
+.delete-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ff4d4d);
+    color: #fff !important;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s ease;
+}
+
+.delete-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(255, 80, 80, 0.25);
+    opacity: 0.9;
+}
+
+
+.profile-img-large {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #e8e8e8;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+    transition: 0.3s ease;
+}
+
+.profile-img-large:hover {
+    transform: scale(1.05);
+}
+
+.profile-card {
+    border-radius: 20px;
+    background: #ffffff;
+}
+
+/* Balance spacing */
+.profile-card .row {
+    padding-top: 10px;  /* Fix huge gap issue */
+}
+
+
+/* Gradient Button (same as quiz page) */
+.gradient-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: #fff !important;
+    border: none;
+    border-radius: 50px;
+    transition: 0.3s ease;
+}
+.gradient-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
+/* Performance Box */
+.performance-card {
+    min-height: 180px;
+}
+
+/* Responsive fixes */
+/* Make right column centered on mobile */
+@media (max-width: 576px) {
+    .profile-info {
+        text-align: center;
+    }
+    .profile-img-large {
+        width: 150px !important;
+        height: 150px !important;
+    }
+}
+</style>
+
+{% endblock content %}

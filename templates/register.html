@@ -1,0 +1,110 @@
+{% extends "index.html" %}
+{% block title %}Register - IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<style>
+
+/* Register Card */
+.register-card {
+    max-width: 450px;
+    margin: auto;
+    background: #ffffff;
+    padding: 40px 35px;
+    border-radius: 20px;
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.12);
+    transition: 0.3s ease;
+}
+.register-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 12px 35px rgba(0,0,0,0.15);
+}
+
+/* Inputs */
+.form-control {
+    border-radius: 12px;
+    padding: 12px 15px;
+    font-size: 1.05rem;
+}
+
+/* Gradient Register Button */
+.register-btn {
+    background: linear-gradient(135deg, #1cc88a, #4e73df);
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 50px;
+    font-weight: 600;
+    color: #fff !important;
+    transition: 0.3s ease;
+}
+.register-btn:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.20);
+}
+
+/* Error message */
+.error-text {
+    color: #d9534f;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+</style>
+
+
+
+<div class="text-center my-5">
+    <h1 class="display-5 fw-bold">Register</h1>
+</div>
+
+
+<div class="register-card">
+
+    <!-- ERROR MESSAGES -->
+    {% for message in messages %}
+    <p class="error-text">{{ message }}</p>
+    {% endfor %}
+
+    <!-- Register Form -->
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <input type="email" name="email" class="form-control"
+                   placeholder="Email" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" name="username" class="form-control"
+                   placeholder="Username" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="password" name="password" class="form-control"
+                   placeholder="Password" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="password" name="password2" class="form-control"
+                   placeholder="Repeat Password" required>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="termsCheck" required>
+            <label class="form-check-label" for="termsCheck">
+                I agree to the <a href="{% url 'term_condition' %}">Terms & Conditions</a>
+            </label>
+        </div>
+
+        <button type="submit" class="register-btn">Register</button>
+
+        <p class="text-center mt-4">
+            Already a member?
+            <b><a href="{% url 'login' %}">Login</a></b>
+        </p>
+    </form>
+</div>
+
+{% endblock content %}

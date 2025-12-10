@@ -1,0 +1,187 @@
+{% extends "index.html" %}
+{% block title %}Edit Profile - IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<h1 class="display-5 fw-bold text-center my-5">Edit Your Profile</h1>
+
+<div class="container">
+
+    <div class="edit-card shadow-sm rounded-4 p-4 mx-auto">
+
+        <!-- Profile Image + Back Button -->
+        <div class="text-center mb-4">
+
+            <!-- Bigger Modern Profile Image -->
+            <img src="{{ user.profile.profile_img.url }}"
+                 alt="profile-pic"
+                 class="rounded-circle edit-profile-img">
+
+            <h3 class="fw-bold mt-3">@{{ request.user.username }}</h3>
+
+            <!-- Back Button -->
+            <a href="{% url 'profile' request.user.username %}"
+            class="btn back-btn px-4 py-2 rounded-pill mt-3">
+                   ← Back to Profile
+            </a>
+
+        </div>
+
+        <!-- Form Section -->
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for message in messages %}
+            <p class="text-danger text-center">{{ message }}</p>
+            {% endfor %}
+
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Profile Image</label>
+                    <input type="file" name="profile_img" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">First Name</label>
+                    <input type="text" name="firstname" 
+                           value="{{ user_profile.user.first_name }}" 
+                           class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Last Name</label>
+                    <input type="text" name="lastname" 
+                           value="{{ user_profile.user.last_name }}" 
+                           class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email" name="email" 
+                           value="{{ user_profile.user.email }}"
+                           class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Username</label>
+                    <input type="text" name="username" 
+                           value="{{ user_profile.user.username }}"
+                           class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Location</label>
+                    <input type="text" name="location" 
+                           value="{{ user_profile.location }}"
+                           class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Gender</label>
+                    <select class="form-select" name="gender" required>
+                        <option disabled>Choose Your Gender</option>
+                        <option {% if user_profile.gender == "Male" %}selected{% endif %}>Male</option>
+                        <option {% if user_profile.gender == "Female" %}selected{% endif %}>Female</option>
+                        <option {% if user_profile.gender == "Other" %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Your Bio</label>
+                    <textarea class="form-control" name="bio" rows="3" required>
+                        {{ user_profile.bio }}
+                    </textarea>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <button type="submit" class="btn save-btn mt-4 px-5 py-2 rounded-pill">
+                💾 Save Profile
+            </button>
+        </form>
+
+    </div>
+</div>
+
+<!-- STYLES -->
+<style>
+
+/* Card container */
+.edit-card {
+    max-width: 650px;
+    background: #ffffff;
+}
+
+/* Profile Image Styling */
+.edit-profile-img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border: 4px solid #e8e8e8;
+    border-radius: 50%;
+    transition: 0.3s ease;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+}
+.edit-profile-img:hover {
+    transform: scale(1.05);
+}
+
+/* Back Button */
+.back-btn {
+    background: #f1f1f1;
+    color: #333;
+    border-radius: 50px;
+    transition: 0.3s ease;
+}
+.back-btn:hover {
+    transform: translateY(-3px);
+    background: #e2e2e2;
+}
+ 
+/* BACK BUTTON (Gradient animated like Save button) */
+.back-btn {
+    background: linear-gradient(135deg, #6fb3f2, #4e73df);
+    color: white !important;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    transition: 0.3s ease;
+}
+
+/* Hover Animation */
+.back-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    opacity: 0.92;
+}
+
+/* Animated Gradient Save Button */
+.save-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white !important;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s ease;
+}
+.save-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    opacity: 0.92;
+}
+
+/* Labels */
+.form-label {
+    font-size: 0.95rem;
+}
+
+/* Responsive Profile Image */
+@media (max-width: 576px) {
+    .edit-profile-img {
+        width: 140px !important;
+        height: 140px !important;
+    }
+}
+</style>
+
+{% endblock content %}

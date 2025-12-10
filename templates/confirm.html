@@ -1,0 +1,96 @@
+{% extends "index.html" %}
+{% block title %}Delete Profile - IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<h1 class="display-5 fw-bold text-center my-5">Delete Profile</h1>
+
+<div class="container d-flex justify-content-center">
+    
+    <div class="delete-card shadow-sm rounded-4 p-4 text-center">
+
+        <!-- Warning Icon -->
+        <div class="mb-3">
+            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+        </div>
+
+        <!-- Message -->
+        <p class="fs-4 fw-semibold">
+            @{{ request.user.username }}, are you sure you want to delete your profile?
+        </p>
+
+        <p class="text-muted mb-4">
+            This action is permanent and cannot be undone.
+        </p>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-center gap-3">
+            <!-- Back Button -->
+            <a href="{% url 'profile' request.user.username %}"
+               class="btn back-btn px-4 py-2 rounded-pill">
+                ← Back to Profile
+            </a>
+
+            <!-- Confirm Button -->
+            <form action="" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn delete-btn px-4 py-2 rounded-pill">
+                    🗑 Confirm Delete
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- STYLES -->
+<style>
+
+/* Card container */
+.delete-card {
+    max-width: 550px;
+    background: #ffffff;
+}
+
+/* Gradient Buttons */
+
+/* Back Button */
+.back-btn {
+    background: linear-gradient(135deg, #6fb3f2, #4e73df);
+    color: white !important;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s ease;
+}
+.back-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    opacity: 0.92;
+}
+
+/* Confirm Delete Button */
+.delete-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ff4d4d);
+    color: white !important;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s ease;
+}
+.delete-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(255, 80, 80, 0.30);
+    opacity: 0.92;
+}
+
+/* Mobile Fix */
+@media (max-width: 576px) {
+    .delete-card {
+        width: 90%;
+        padding: 20px;
+    }
+}
+</style>
+
+{% endblock %}

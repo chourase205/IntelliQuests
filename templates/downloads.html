@@ -1,0 +1,84 @@
+{% extends "index.html" %}
+{% block title %}Downloads - IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<style>
+
+/* Card design */
+.download-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0px 6px 20px rgba(0,0,0,0.10);
+    transition: 0.3s ease;
+}
+.download-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 12px 30px rgba(0,0,0,0.15);
+}
+
+/* Section Title */
+.download-card h2 {
+    color: #4e73df;
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+/* Gradient Button */
+.download-btn {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white !important;
+    font-weight: 600;
+    padding: 10px 26px;
+    border-radius: 50px;
+    border: none;
+    display: inline-block;
+    transition: 0.3s ease;
+    text-decoration: none;
+}
+.download-btn:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.20);
+}
+
+</style>
+
+
+<h1 class="display-5 fw-bold text-center my-5">Downloads</h1>
+
+<main>
+    <div class="container col-md-8 col-sm-12">
+
+        <!-- Download item 1 -->
+        <div class="download-card mb-4">
+            <h2>Research Paper</h2>
+            <p>
+                Interview Preparation Cheat sheets (DSA, SQL, OS, Networks, OOP)
+            </p>
+            <a href="{% url "research_paper" %}" class="download-btn">⬇ Download/Open PDF</a>
+        </div>
+
+        <!-- Download item 2 -->
+        <div class="download-card mb-4">
+            <h2>Reports</h2>
+            <p>
+                Gamified Quiz-Based Learning for Technical Skill Development: A Modern Approach
+            </p>
+            <a href="{% url "report" %}" class="download-btn">⬇ Download/Open PDF</a>
+        </div>
+
+        <!-- Download item 3 -->
+        <div class="download-card mb-4">
+            <h2>Notes</h2>
+            <p>
+                A document summarizing platform improvements, bug fixes, and feature releases.
+            </p>
+            <a href="{% url "notes" %}" class="download-btn">⬇ Download/Open PDF</a>
+        </div>
+
+    </div>
+</main>
+
+{% endblock content %}

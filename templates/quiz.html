@@ -1,0 +1,217 @@
+{% extends 'index.html' %}
+
+{% block title %}{{ quiz.title }} - IntelliQuest{% endblock title %}
+
+{% block content %}
+
+<style>
+    /* Disable text selection */
+    .questions { user-select: none; }
+
+    /* Modern Timer */
+    #timer {
+        background: linear-gradient(135deg, #4e73df, #1cc88a);
+        padding: 6px 18px;
+        color: white;
+        border-radius: 20px;
+        font-weight: 600;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.12);
+    }
+
+    /* Question Card */
+    .question {
+        border-radius: 14px;
+        transition: 0.2s ease;
+    }
+    .question:hover {
+        transform: translateY(-3px);
+        box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+        background: #f4f6ff;
+        font-size: 1.1rem;
+        padding: 12px;
+        border-radius: 14px 14px 0 0 !important;
+    }
+
+    /* Submit Button (Same Gradient + Animation) */
+    #submit-button {
+        background: linear-gradient(135deg, #4e73df, #1cc88a);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 12px 40px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: 0.3s ease;
+        margin-top: 20px;
+    }
+
+    #submit-button:hover {
+        transform: translateY(-3px);
+        opacity: 0.9;
+        box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Correct Answer Highlight */
+    .correct-mark {
+        background: #d4edda !important;
+        font-weight: bold;
+        border-radius: 6px;
+    }
+
+    /* Checkbox spacing */
+    .form-check {
+        padding-left: 1.8rem;
+    }
+
+    /* Mobile Fix */
+    @media (max-width: 576px) {
+        #timer {
+            padding: 6px 14px;
+            font-size: 1rem;
+        }
+    }
+</style>
+
+
+<!-- PAGE TITLE -->
+<h1 class="display-5 fw-bold text-center my-4">{{ quiz.title }}</h1>
+<p class="text-center fs-5 text-muted container">{{ quiz.description }}</p>
+
+<div class="container">
+
+    <!-- Quiz Header (date + timer) -->
+    <div class="d-flex justify-content-between align-items-center my-4">
+        <span class="text-muted fs-6">{{ quiz.created_at }}</span>
+        <span class="fs-5" id="timer">05:00</span>
+    </div>
+
+    {% for message in messages %}
+    <div id="message-div">
+        <h4 class="text-center text-success fw-semibold">{{ message }}</h4>
+    </div>
+    {% endfor %}
+
+    <!-- QUESTIONS -->
+    <div class="questions my-4">
+        {% for question in quiz.question_set.all %}
+        <div class="card question mb-4">
+
+            <div class="card-header fw-bold">
+                Question {{ forloop.counter }}
+            </div>
+
+            <div class="card-body">
+                <p class="card-text fs-5">{{ question.text }}</p>
+
+                {% for option in question.choice_set.all %}
+                <div class="form-check my-2">
+                    <label class="form-check-label" for="{{ option.id }}">
+                        <input class="form-check-input"
+                               value="{{ option.text }}"
+                               type="radio"
+                               name="{{ option.question.id }}"
+                               id="{{ option.id }}">
+                        {{ option.text }}
+                    </label>
+
+                    {% if option.is_correct %}
+                    <span class="visually-hidden correct-answer">{{ option.text }}</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- SUBMIT BUTTON FORM -->
+    <form method="POST" id="quiz-form">
+        {% csrf_token %}
+        <input type="hidden" name="score" value="0" id="user-score">
+
+        <div class="text-center">
+            <button type="submit" id="submit-button">
+                Submit Quiz
+            </button>
+        </div>
+    </form>
+
+</div>
+
+
+<!-- JS LOGIC (unchanged, works normally) -->
+<script>
+var submitButton = document.getElementById("submit-button");
+var timerSpan = document.getElementById("timer");
+var quizForm = document.getElementById("quiz-form");
+var questions = document.querySelectorAll(".question");
+var userScoreInput = document.getElementById("user-score");
+
+quizDuration = 5 * 60;
+
+// Update Timer
+function updateTimer() {
+    var minutes = Math.floor(quizDuration / 60);
+    var seconds = quizDuration % 60;
+
+    timerSpan.innerText = `${minutes}m ${seconds}s`;
+
+    if (quizDuration <= 0) {
+        clearTimeout(quizTimerId);
+        submitQuiz();
+    } else if (document.getElementById("message-div")) {
+        clearTimeout(quizTimerId);
+        highlightCorrectAnswers();
+    } else {
+        quizDuration--;
+    }
+}
+
+// Submit Quiz
+function submitQuiz() {
+    calculateScore();
+    quizForm.submit();
+}
+
+// Calculate Score
+function calculateScore() {
+    var score = 0;
+
+    questions.forEach(question => {
+        var selectedInput = question.querySelector("input:checked");
+        var correctAnswer = question.querySelector(".correct-answer").innerText;
+
+        if (selectedInput && selectedInput.value === correctAnswer) {
+            score += 1;
+        }
+    });
+
+    userScoreInput.value = score;
+}
+
+// Highlight Correct Answer
+function highlightCorrectAnswers() {
+    questions.forEach(question => {
+        var correctAnswer = question.querySelector(".correct-answer");
+        var correctLabel = correctAnswer.previousElementSibling;
+
+        correctLabel.classList.add("correct-mark");
+        correctLabel.querySelector("input").classList.add("correct-mark");
+    });
+
+    submitButton.disabled = true;
+
+    document.querySelectorAll(".form-check-input").forEach(input => {
+        input.disabled = true;
+    });
+}
+
+submitButton.addEventListener("click", submitQuiz);
+quizTimerId = setInterval(updateTimer, 1000);
+</script>
+
+{% endblock content %}

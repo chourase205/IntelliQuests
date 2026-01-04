@@ -1,10 +1,14 @@
 asgiref==3.10.0
+boto3==1.42.21
+botocore==1.42.21
 Django==5.2.7
 django-ckeditor==6.7.3
 django-environ==0.12.0
 django-js-asset==3.1.2
+django-storages==1.14.6
 et_xmlfile==2.0.0
 gunicorn==23.0.0
+jmespath==1.0.1
 numpy==2.3.4
 openpyxl==3.1.5
 packaging==25.0
@@ -14,7 +18,9 @@ psycopg==3.3.2
 psycopg-binary==3.3.2
 python-dateutil==2.9.0.post0
 pytz==2025.2
+s3transfer==0.16.0
 six==1.17.0
 sqlparse==0.5.3
 tzdata==2025.2
+urllib3==2.6.2
 whitenoise==6.11.0

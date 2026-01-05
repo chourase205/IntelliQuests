@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import environ
+import dj_database_url
 
 # --------------------------------------------------
 # BASE DIR
@@ -10,16 +11,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # --------------------------------------------------
 # ENV
 # --------------------------------------------------
-env = environ.Env()
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+# Read .env locally only
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # --------------------------------------------------
-# ENVIRONMENT DETECTION
+# DEBUG
 # --------------------------------------------------
-# Railway automatically sets RAILWAY_ENVIRONMENT
-IS_RAILWAY = os.environ.get("RAILWAY_ENVIRONMENT") is not None
-
-DEBUG = not IS_RAILWAY
+DEBUG = env.bool("DEBUG", default=False)
 
 # --------------------------------------------------
 # SECURITY
@@ -47,12 +49,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # local apps
+    # Local apps
     "account",
     "base",
     "quiz",
 
-    # third-party
+    # Third-party
     "ckeditor",
     "storages",
 ]
@@ -99,28 +101,15 @@ TEMPLATES = [
 ]
 
 # --------------------------------------------------
-# DATABASE
+# DATABASE (WORKS LOCALLY + RAILWAY)
 # --------------------------------------------------
-if DEBUG:
-    # ✅ LOCAL — SQLite
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-else:
-    # ✅ RAILWAY — PostgreSQL
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": env("PGDATABASE"),
-            "USER": env("PGUSER"),
-            "PASSWORD": env("PGPASSWORD"),
-            "HOST": env("PGHOST"),
-            "PORT": env("PGPORT"),
-        }
-    }
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        ssl_require=not DEBUG,
+    )
+}
 
 # --------------------------------------------------
 # PASSWORD VALIDATION
@@ -141,7 +130,7 @@ USE_I18N = True
 USE_TZ = True
 
 # --------------------------------------------------
-# STATIC / MEDIA
+# STATIC FILES (WhiteNoise)
 # --------------------------------------------------
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -150,17 +139,14 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# --------------------------------------------------
+# MEDIA FILES (S3)
+# --------------------------------------------------
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# --------------------------------------------------
-# DEFAULT PK
-# --------------------------------------------------
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# --------------------------------------------------
-# AWS S3 (PRODUCTION)
-# --------------------------------------------------
 if not DEBUG:
     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
@@ -170,4 +156,8 @@ if not DEBUG:
     AWS_DEFAULT_ACL = None
 
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+# --------------------------------------------------
+# DEFAULT PK
+# --------------------------------------------------
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

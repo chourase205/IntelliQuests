@@ -30,9 +30,9 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG=True
 
 
-ALLOWED_HOSTS = ["*", "intelliquest.up.railway.app"]
+ALLOWED_HOSTS = ["*", "intelliquests.up.railway.app"]
 
-CSRF_TRUSTED_ORIGINS = ["https://intelliquest.up.railway.app"]
+CSRF_TRUSTED_ORIGINS = ["https://intelliquests.up.railway.app"]
 
 # Application definition
 
@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'IntelliQuest.urls'
+ROOT_URLCONF = 'IntelliQuests.urls'
 
 TEMPLATES = [
     {

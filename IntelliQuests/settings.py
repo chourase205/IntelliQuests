@@ -30,9 +30,9 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG=True
 
 
-ALLOWED_HOSTS = ["*", "intelliquests.up.railway.app"]
+ALLOWED_HOSTS = ["*", "intelliquest.up.railway.app"]
 
-CSRF_TRUSTED_ORIGINS = ["https://intelliquests.up.railway.app"]
+CSRF_TRUSTED_ORIGINS = ["https://intelliquest.up.railway.app"]
 
 # Application definition
 
@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'IntelliQuests.urls'
+ROOT_URLCONF = 'IntelliQuest.urls'
 
 TEMPLATES = [
     {
@@ -82,17 +82,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'IntelliQuests.wsgi.application'
 
 LOGIN_URL = 'login'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 if DEBUG:
     # Local development (Mac / Windows)

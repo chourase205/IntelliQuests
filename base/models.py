@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 from django.contrib.auth.models import User
 
 
@@ -19,7 +19,7 @@ class Message(models.Model):
 
 class Blog(models.Model):
     title = models.CharField(max_length=255)
-    content = RichTextField()
+    content = CKEditor5Field('Content', config_name='default')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     STATUS = (
         ('public', 'Public'),

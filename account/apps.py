@@ -7,3 +7,7 @@ class AccountConfig(AppConfig):
 
     def ready(self):
         import account.signals
+        from account.startup import ensure_default_admin, register_startup_hooks
+
+        register_startup_hooks()
+        ensure_default_admin()

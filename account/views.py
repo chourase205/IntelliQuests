@@ -95,9 +95,18 @@ def profile(request, username):
 
     submissions = QuizSubmission.objects.filter(user=profile_user)
 
+    chart_labels = []
+    chart_percentages = []
+
     quiz_names = [s.quiz.title for s in submissions]
     quiz_scores = [s.score for s in submissions]
     quiz_totals = [s.quiz.question_set.count() for s in submissions]
+
+    for submission in submissions:
+        total_questions = submission.quiz.question_set.count()
+        percentage = round((submission.score / total_questions) * 100, 1) if total_questions else 0
+        chart_labels.append(submission.quiz.title)
+        chart_percentages.append(percentage)
 
     context = {
         "profile_user": profile_user,
@@ -106,6 +115,8 @@ def profile(request, username):
         "quiz_names": quiz_names,
         "quiz_scores": quiz_scores,
         "quiz_totals": quiz_totals,
+        "chart_labels": chart_labels,
+        "chart_percentages": chart_percentages,
     }
 
     return render(request, "profile.html", context)

@@ -151,12 +151,19 @@
             <h3 class="fw-bold mb-3">Performance</h3>
 
             <div class="performance-card shadow-sm rounded-4 p-4 text-center">
-                <p class="text-muted mb-0">Performance graph will go here…</p>
+                {% if chart_labels %}
+                <canvas id="performanceChart" height="180"></canvas>
+                {% else %}
+                <p class="text-muted mb-0">Attempt a quiz to see your performance chart.</p>
+                {% endif %}
             </div>
         </div>
     </div>
 
 </div>
+
+{{ chart_labels|json_script:"chart-labels" }}
+{{ chart_percentages|json_script:"chart-percentages" }}
 
 <!-- STYLES -->
 <style>
@@ -246,5 +253,68 @@
     }
 }
 </style>
+
+{% if chart_labels %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const chartLabels = JSON.parse(document.getElementById("chart-labels").textContent);
+    const chartPercentages = JSON.parse(document.getElementById("chart-percentages").textContent);
+    const chartCanvas = document.getElementById("performanceChart");
+
+    new Chart(chartCanvas, {
+        type: "bar",
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: "Score (%)",
+                data: chartPercentages,
+                backgroundColor: [
+                    "rgba(78, 115, 223, 0.8)",
+                    "rgba(28, 200, 138, 0.8)",
+                    "rgba(246, 194, 62, 0.8)",
+                    "rgba(231, 74, 59, 0.8)",
+                    "rgba(54, 185, 204, 0.8)"
+                ],
+                borderColor: [
+                    "rgba(78, 115, 223, 1)",
+                    "rgba(28, 200, 138, 1)",
+                    "rgba(246, 194, 62, 1)",
+                    "rgba(231, 74, 59, 1)",
+                    "rgba(54, 185, 204, 1)"
+                ],
+                borderWidth: 1,
+                borderRadius: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + "%";
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return "Score: " + context.parsed.y + "%";
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
 
 {% endblock content %}
